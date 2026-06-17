@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT 아이콘 퀴즈</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>IT 아이콘 퀴즈</h1>
+            <div class="score-container">점수: <span id="score">0</span> / 10</div>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="question-status">문제 <span id="current-question-num">1</span> / 10</div>
+        </header>
+
+        <main>
+            <div id="loading" class="screen active">
+                <div class="spinner"></div>
+                <p>문제를 불러오는 중입니다...</p>
+                <p class="help-text" id="loading-help" style="display:none; color: #ff6b6b; margin-top: 15px; font-size: 0.85em; text-align: center; line-height: 1.4;">
+                    시트 데이터를 불러올 수 없습니다.<br>
+                    스프레드시트 우측 상단 '공유' 버튼을 눌러<br>
+                    <strong>'링크가 있는 모든 사용자'</strong>가 볼 수 있도록 설정해주세요.
+                </p>
+            </div>
+
+            <div id="quiz-screen" class="screen">
+                <div class="image-container">
+                    <img id="icon-image" src="" alt="IT Icon" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\'><rect width=\'100\' height=\'100\' fill=\'%23eee\'/><text x=\'50\' y=\'50\' font-family=\'sans-serif\' font-size=\'14\' text-anchor=\'middle\' alignment-baseline=\'middle\' fill=\'%23333\'>이미지 없음</text></svg>';">
+                </div>
+                <div class="options-grid" id="options">
+                    <!-- Buttons injected via JS -->
+                </div>
+            </div>
+
+            <div id="result-screen" class="screen">
+                <h2>퀴즈 완료!</h2>
+                <div class="final-score" id="final-score-text"></div>
+                <button id="restart-btn" class="primary-btn">다시 하기</button>
+            </div>
+        </main>
+    </div>
+    
+    <!-- PapaParse for CSV Parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
