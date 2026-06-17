@@ -1,7 +1,3 @@
-const SHEET_ID = '1N4C766otSSAFLBarWtJqjCav7feGEl0A2z7rG9Px9lM';
-// Use the CSV export URL format
-const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
-
 let quizData = [];
 let currentQuestionIndex = 0;
 let score = 0;
@@ -23,31 +19,19 @@ const restartBtn = document.getElementById('restart-btn');
 
 async function initQuiz() {
     try {
-        const response = await fetch(SHEET_URL);
+        // Call our Vercel Serverless API
+        const response = await fetch('/api/getQuiz');
         if (!response.ok) {
-            throw new Error('Network response was not ok. This usually means the sheet is not accessible.');
+            throw new Error('Failed to fetch from API');
         }
-        const csvText = await response.text();
+        const data = await response.json();
         
-        // Parse CSV to JSON using PapaParse
-        Papa.parse(csvText, {
-            header: true,
-            skipEmptyLines: true,
-            complete: function(results) {
-                if (results.data && results.data.length > 0) {
-                    quizData = results.data;
-                    // Shuffle the data to get random questions if needed, or just take first MAX_QUESTIONS
-                    // quizData = quizData.sort(() => 0.5 - Math.random());
-                    
-                    startQuiz();
-                } else {
-                    showError();
-                }
-            },
-            error: function() {
-                showError();
-            }
-        });
+        if (data && data.length > 0) {
+            quizData = data;
+            startQuiz();
+        } else {
+            showError();
+        }
     } catch (error) {
         console.error('Error fetching data:', error);
         showError();
