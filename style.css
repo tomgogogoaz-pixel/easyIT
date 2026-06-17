@@ -193,6 +193,58 @@ h1 {
     -webkit-text-fill-color: transparent;
 }
 
+.save-score-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
+}
+
+#nickname-input {
+    width: 100%;
+    padding: 14px 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+    font-size: 1rem;
+    font-family: inherit;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+#nickname-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+#nickname-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.save-btn {
+    width: 100%;
+    background: linear-gradient(to right, #8b5cf6, #3b82f6);
+}
+
+.save-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.status-msg {
+    font-size: 0.9rem;
+    height: 20px;
+}
+.status-msg.success { color: var(--correct); }
+.status-msg.error { color: var(--wrong); }
+
 .primary-btn {
     background: var(--primary);
     color: white;

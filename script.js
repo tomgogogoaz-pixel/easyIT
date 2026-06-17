@@ -17,6 +17,12 @@ const optionsContainer = document.getElementById('options');
 const finalScoreText = document.getElementById('final-score-text');
 const restartBtn = document.getElementById('restart-btn');
 
+// NEW DOM Elements for Saving
+const nicknameInput = document.getElementById('nickname-input');
+const saveScoreBtn = document.getElementById('save-score-btn');
+const saveStatusMsg = document.getElementById('save-status-msg');
+const saveScoreContainer = document.getElementById('save-score-container');
+
 async function initQuiz() {
     try {
         // Call our Vercel Serverless API
@@ -46,6 +52,16 @@ function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
     updateScore();
+    
+    // Reset save form
+    if (nicknameInput) nicknameInput.value = '';
+    if (saveStatusMsg) {
+        saveStatusMsg.textContent = '';
+        saveStatusMsg.className = 'status-msg';
+    }
+    if (saveScoreBtn) saveScoreBtn.disabled = false;
+    if (saveScoreContainer) saveScoreContainer.style.display = 'flex';
+
     showScreen(quizScreen);
     loadQuestion();
 }
@@ -132,6 +148,52 @@ function showScreen(screenToShow) {
 }
 
 restartBtn.addEventListener('click', startQuiz);
+
+if (saveScoreBtn) {
+    saveScoreBtn.addEventListener('click', async () => {
+        const nickname = nicknameInput.value.trim();
+        if (!nickname) {
+            saveStatusMsg.textContent = '이름을 입력해주세요!';
+            saveStatusMsg.className = 'status-msg error';
+            return;
+        }
+
+        saveScoreBtn.disabled = true;
+        saveScoreBtn.textContent = '저장 중...';
+        saveStatusMsg.textContent = '';
+
+        try {
+            const response = await fetch('/api/saveScore', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: nickname, score: score })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                saveStatusMsg.textContent = '기록이 성공적으로 저장되었습니다! 🎉';
+                saveStatusMsg.className = 'status-msg success';
+                setTimeout(() => {
+                    saveScoreContainer.style.display = 'none';
+                }, 2000);
+            } else {
+                throw new Error(data.error || 'Failed to save');
+            }
+        } catch (error) {
+            console.error('Save error:', error);
+            saveStatusMsg.textContent = error.message || '저장에 실패했습니다.';
+            saveStatusMsg.className = 'status-msg error';
+            saveScoreBtn.disabled = false;
+        } finally {
+            if (saveScoreBtn.disabled === false) {
+                saveScoreBtn.textContent = '기록 저장하기';
+            }
+        }
+    });
+}
 
 // Initialize when the script loads
 initQuiz();
